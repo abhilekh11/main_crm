@@ -4,7 +4,7 @@ import companyLogo from "./avatar5.png";
 function SideNav() {
   ////// Hide And Show/////
   const [line, setline] = useState("none");
-  const [lead1, setlead] = useState("none");
+  const [lead1, setlead] = useState("block");
   const [callManageshow, setcallManageshow] = useState("none");
   const [sms, setsms] = useState("none");
   const [wtsp, setwtsp] = useState("none");
@@ -495,7 +495,7 @@ function SideNav() {
                     </ul>
                   </li>
 
-                  <li className="nav-item">
+                  <li className="nav-item" style={{ display:'none' }}>
                     <Link to="#" className="nav-link" onClick={callManage}>
                       <i className="nav-icon fas fa fa fa-cog" />
                       Call  Manage
@@ -571,10 +571,10 @@ function SideNav() {
                     </li> */}
                   </ul>
                 </li>
-                <li className="nav-item">
+                <li className="nav-item" >
                   <Link to="#" className="nav-link" onClick={callManage}>
                     <i className="nav-icon fas fa fa fa-cog" />
-                    Call Manage
+                    Call Manage 
                     <i className="fas fa-angle-left right" />
                   </Link>
                   <ul className="nav nav-treeview" style={{ display: callManageshow }}>

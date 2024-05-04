@@ -2968,6 +2968,29 @@ function Setting() {
                                                     case "65a904e04473619190494482": {
                                                       return "d-none";
                                                     }
+                                                    case "65a904fc4473619190494486": {
+                                                      return "d-none";
+                                                    }
+
+                                                    default:
+                                                      return ""; // Default class for other statuses
+                                                  }
+                                                };
+
+                                                const getStatusBadgeClassdeleteremove = (
+                                                  statusName
+                                                ) => {
+                                                  switch (statusName) {
+                                                    case "65a904e04473619190494482": {
+                                                      return "d-none";
+                                                    }
+                                                    case "65a904ed4473619190494484": {
+                                                      return "d-none";
+                                                    }
+                                                    case "65a904fc4473619190494486": {
+                                                      return "d-none";
+                                                    }
+                                                    
 
                                                     default:
                                                       return ""; // Default class for other statuses
@@ -3022,7 +3045,10 @@ function Setting() {
                                                         onClick={(e) =>
                                                           editstatus(state._id)
                                                         }
-                                                        className="btn btn-info btn-xs"
+                                                        // className="btn btn-info btn-xs"
+                                                        className={`btn btn-info btn-xs ${getStatusBadgeClassdeleteremove(
+                                                          state._id
+                                                        )}`}
                                                       >
                                                         <i
                                                           className="fa fa-pencil-square-o"
