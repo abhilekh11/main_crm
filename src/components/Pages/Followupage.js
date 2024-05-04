@@ -545,7 +545,8 @@ export default function Followupage() {
                                       <lable>Agent Name </lable>
                                     </div>
                                     <div className="col-md-8 col-xs-8">
-                                      <select
+                                      <select  
+                                       disabled={localStorage.getItem("role") === "user" ? true : false}
                                         className="form-control"
                                         required
                                         onChange={(e) =>
