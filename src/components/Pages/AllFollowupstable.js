@@ -692,7 +692,8 @@ export default function AllFollowupstable({ sendDataToParent, dataFromParent }) 
                 <option value="50">50</option>
                 <option value="100">100</option>
               </select></>
-            ) : (<><span class="btn btn-sm shadow_btn">Rows per page:</span>
+            ) : (<> <button className="btn btn-sm shadow_btn btn-success" onClick={handleCheckAll1}>Select All</button>
+            <button className="btn btn-sm shadow_btn btn-success" onClick={handleCheckAll}>Select Per Page</button><span class="btn btn-sm shadow_btn">Rows per page:</span>
               <select
                 className="btn btn-sm shadow_btn  "
                 value={rowsPerPage}
