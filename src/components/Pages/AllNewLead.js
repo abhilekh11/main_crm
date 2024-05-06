@@ -18,6 +18,11 @@ export const AllNewLead = ({ sendDataToParent, dataFromParent }) => {
   const [search, setsearch] = useState("");
   const [filterleads, setfilterleads] = useState([]);
   const [selectedRowIds, setSelectedRowIds] = useState([]);
+ const [selectedRowIds1, setSelectedRowIds1] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+
+
   const { agent } = useSelector((state) => state.agent);
   const { Statusdata } = useSelector((state) => state.StatusData);
   const apiUrl = process.env.REACT_APP_API_URL;
@@ -96,26 +101,7 @@ export const AllNewLead = ({ sendDataToParent, dataFromParent }) => {
     }
   }, [localStorage.getItem("user_id"),apiUrl,DBuUrl]);
   
-  // useEffect(() => {
-  //   const result = leads.filter((lead) => {
-  //     return (
-  //       lead.full_name.toLowerCase().match(search.toLowerCase()) ||
-  //       lead?.agent_details[0]?.agent_name
-  //         .toLowerCase()
-  //         .match(search.toLowerCase()) ||
-  //       lead?.service_details[0]?.product_service_name
-  //         .toLowerCase()
-  //         .match(search.toLowerCase()) ||
-  //       lead?.lead_source_details[0]?.lead_source_name
-  //         .toLowerCase()
-  //         .match(search.toLowerCase()) ||
-  //       lead?.status_details[0]?.status_name
-  //         .toLowerCase()
-  //         .match(search.toLowerCase())
-  //     );
-  //   });
-  //   setfilterleads(result);
-  // }, [search]);
+  
 
   useEffect(() => {
     const result = leads.filter((lead) => {
@@ -132,8 +118,69 @@ export const AllNewLead = ({ sendDataToParent, dataFromParent }) => {
 
 
 
-  const isAdmin = localStorage.getItem("role") === "admin";
+  const isAdmin = localStorage.getItem("role") === "admin" || localStorage.getItem("role") === "TeamLeader";
+  const isAdmin1 = localStorage.getItem("role") === "admin";
+  ////// cleck per page
+  const handleCheckAll = (e) => {
+    e.preventDefault();
+    const startIndex = (currentPage - 1) * rowsPerPage;
+    const endIndex = Math.min(startIndex + rowsPerPage, filterleads.length);
+    const currentPageIds = filterleads.slice(startIndex, endIndex).map(row => row._id);
+    const allSelectedOnPage = currentPageIds.every(id => selectedRowIds1.includes(id));
+
+    if (allSelectedOnPage) {
+      setSelectedRowIds1(prevIds => prevIds.filter(id => !currentPageIds.includes(id)));
+    } else {
+      setSelectedRowIds1(prevIds => [...new Set([...prevIds, ...currentPageIds])]);
+    }
+    sendDataToParent(selectedRowIds1);
+    // console.log('cleck per page select',selectedRowIds1)
+  };
+
+  ////// cleck All page
+  const handleCheckAll1 = (e) => {
+    e.preventDefault();
+    const currentPageIds = filterleads.map(row => row._id);
+    const allSelectedOnPage = currentPageIds.every(id => selectedRowIds1.includes(id));
+
+    if (allSelectedOnPage) {
+      setSelectedRowIds1(prevIds => prevIds.filter(id => !currentPageIds.includes(id)));
+    } else {
+      setSelectedRowIds1(prevIds => [...prevIds, ...currentPageIds.filter(id => !prevIds.includes(id))]);
+    }
+    sendDataToParent(selectedRowIds1);
+    // console.log('cleck All page select',selectedRowIds1)
+  };
+
+
+
+  const handleSingleCheck = async (e, row) => {
+    const selectedId = e.target.value;
+    const isChecked = e.target.checked;
+    if (isChecked) {
+      await setSelectedRowIds1(prevIds => [...prevIds, selectedId]);
+
+    } else {
+      await setSelectedRowIds1(prevIds => prevIds.filter(id => id !== selectedId));
+    }
+  };
+
+  useEffect(() => {
+    sendDataToParent(selectedRowIds1);
+  }, [selectedRowIds1]);
+
+
   const commonColumns = [
+    {
+      name: 'Checkbox',
+      cell: (row, index) => (<>  <input
+        type="checkbox"
+        defaultValue={row._id}
+        checked={selectedRowIds1.includes(row._id)} // ensure checkboxes reflect selection state
+        onChange={(e) => handleSingleCheck(e, row)}
+      /></>
+      ),
+    },
     {
       name: "Name",
       cell: (row) => (
@@ -329,18 +376,21 @@ export const AllNewLead = ({ sendDataToParent, dataFromParent }) => {
   // },
   };
 
+
   const handleSelectedRowsChange = ({ selectedRows }) => {
-    const selectedIds = selectedRows.map((row) => row._id);
+    let selectedIds = selectedRows.map((row) => row._id);
     setSelectedRowIds(selectedIds);
     sendDataToParent(selectedIds);
   };
+
+  
   const [adSerch, setAdvanceSerch] = useState([]);
 
   const DeleteSelected = async () => {
     const confirmDelete = window.confirm("Are you sure you want to delete?");
 
     if (confirmDelete) {
-      const aaaaa = { ids: selectedRowIds };
+      const aaaaa = { ids: selectedRowIds1 };
 
       fetch(`${apiUrl}/BulkDeleteLead`, {
         method: "delete",
@@ -444,6 +494,13 @@ export const AllNewLead = ({ sendDataToParent, dataFromParent }) => {
       window.location.reload(false);
     }, 500);
   };
+  const handlePageChange = page => {
+    setCurrentPage(page); // Update current page state when page changes
+  };
+  const getrowperpage = async (e) => {
+    const newValue = e.target.value;
+    setRowsPerPage(newValue)
+  }
 
   return (
     <div>
@@ -539,16 +596,28 @@ export const AllNewLead = ({ sendDataToParent, dataFromParent }) => {
           </form>
         </div>
       </div>
+      <div className="row" style={{ paddingBottom: '23px' }}>
+        <div className="col-md-12 advS">
+          {
+
+            isAdmin1 ? (<>
+              <button className="btn btn-sm shadow_btn btn-success" onClick={exportToPDF}>Export PDF</button>
+              <button className="btn btn-sm shadow_btn btn-success" onClick={exportToExcel}>
+                Export Excel
+              </button>
+              <button className="btn shadow_btn btn-sm btn-danger" onClick={DeleteSelected}>
+                Delete
+              </button> </>
+            ) : (<></>)
+          }
+        </div>
+      </div>
 
       {status === false ? (
-        <table
-          id="example"
-          className="table table-striped pt-3"
-          style={{ width: "100%" }}
-        >
+        <table id="example" className="table table-striped pt-3" style={{ width: '100%' }}>
           <thead>
             <tr>
-              <th>Name</th>
+              <th>Full Name</th>
               <th>Number</th>
               <th>Agent</th>
               <th>Service</th>
@@ -560,38 +629,54 @@ export const AllNewLead = ({ sendDataToParent, dataFromParent }) => {
             <tr>
               <p className="text-center">No Followup leads Founds</p>
             </tr>
+
           </tbody>
         </table>
       ) : (
         <>
-          <button
-            className="btn btn-sm  shadow_btn btn-success ml-10"
-            onClick={exportToPDF}
-          >
-            Export PDF
-          </button>
 
-          <button className="btn btn-sm shadow_btn btn-success" onClick={exportToExcel}>
-            Export Excel
-          </button>
+          {
 
-          {isAdmin ? (
-            <button className="btn shadow_btn btn-sm btn-danger" onClick={DeleteSelected}>
-              Delete
-            </button>
-          ) : (
-            <></>
-          )}
+            isAdmin1 ? (<>
+              <button className="btn btn-sm shadow_btn btn-success" onClick={handleCheckAll1}>Select All</button>
+              <button className="btn btn-sm shadow_btn btn-success" onClick={handleCheckAll}>Select Per Page</button>
+              <span class="btn btn-sm shadow_btn">Rows per page:</span>
+              <select
+                className="btn btn-sm shadow_btn  "
+                value={rowsPerPage}
+                onChange={getrowperpage}
+              >
+                <option value="10">10</option>
+
+                <option value="25">25</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+              </select></>
+            ) : (<><span class="btn btn-sm shadow_btn">Rows per page:</span>
+              <select
+                className="btn btn-sm shadow_btn  "
+                value={rowsPerPage}
+                onChange={getrowperpage}
+              >
+                <option value="10">10</option>
+
+                <option value="25">25</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+              </select></>)
+          }
+         
           <DataTable
+            key={rowsPerPage} // Add key prop to force re-render when rowsPerPage changes
             responsive
             id="table-to-export"
             columns={columns}
             data={filterleads}
             pagination
+            paginationPerPage={rowsPerPage}
             fixedHeader
             fixedHeaderScrollHeight="550px"
-            selectableRows
-            selectableRowsHighlight
+            // selectableRows="single"
             highlightOnHover
             subHeader
             subHeaderComponent={
@@ -600,15 +685,17 @@ export const AllNewLead = ({ sendDataToParent, dataFromParent }) => {
                 placeholder="Search here"
                 value={search}
                 onChange={(e) => setsearch(e.target.value)}
-                className="form-control w-25 "
+                className="form-control w-25"
               />
             }
+            onSelectedRowsChange={handleSelectedRowsChange}
             customStyles={customStyles}
             selectedRows={selectedRowIds}
-            onSelectedRowsChange={handleSelectedRowsChange}
+            onChangePage={handlePageChange}
             striped
           />
         </>
+
       )}
     </div>
   );

@@ -486,6 +486,13 @@ function SideNav() {
                       </li>
 
                       <li className="nav-item">
+                      <a href="javascript:void(0);" className={activeItem === 'newlead' ? 'nav-link active' : 'nav-link'}
+                        onClick={() => handleItemClick('newlead')}>
+                        <p> New Leads</p>
+                      </a>
+                    </li>
+
+                      <li className="nav-item">
                       <a href="javascript:void(0);" className={activeItem === 'importedlead' ? 'nav-link active' : 'nav-link'}
                         onClick={() => handleItemClick('importedlead')}>
                         <p> Imported Lead</p>
@@ -553,6 +560,13 @@ function SideNav() {
                       <a href="javascript:void(0);" className={activeItem === 'followupleads' ? 'nav-link active' : 'nav-link'}
                         onClick={() => handleItemClick('followupleads')}>
                         <p> Followup Leads</p>
+                      </a>
+                    </li>
+
+                    <li className="nav-item">
+                      <a href="javascript:void(0);" className={activeItem === 'newlead' ? 'nav-link active' : 'nav-link'}
+                        onClick={() => handleItemClick('newlead')}>
+                        <p> New Leads</p>
                       </a>
                     </li>
 
