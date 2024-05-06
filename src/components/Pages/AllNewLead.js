@@ -614,10 +614,14 @@ export const AllNewLead = ({ sendDataToParent, dataFromParent }) => {
       </div>
 
       {status === false ? (
-        <table id="example" className="table table-striped pt-3" style={{ width: '100%' }}>
+        <table
+          id="example"
+          className="table table-striped pt-3"
+          style={{ width: "100%" }}
+        >
           <thead>
             <tr>
-              <th>Full Name</th>
+              <th>Name</th>
               <th>Number</th>
               <th>Agent</th>
               <th>Service</th>
@@ -629,73 +633,78 @@ export const AllNewLead = ({ sendDataToParent, dataFromParent }) => {
             <tr>
               <p className="text-center">No Followup leads Founds</p>
             </tr>
-
           </tbody>
         </table>
       ) : (
         <>
 
-          {
 
-            isAdmin1 ? (<>
-              <button className="btn btn-sm shadow_btn btn-success" onClick={handleCheckAll1}>Select All</button>
-              <button className="btn btn-sm shadow_btn btn-success" onClick={handleCheckAll}>Select Per Page</button>
-              <span class="btn btn-sm shadow_btn">Rows per page:</span>
-              <select
-                className="btn btn-sm shadow_btn  "
-                value={rowsPerPage}
-                onChange={getrowperpage}
-              >
-                <option value="10">10</option>
-
-                <option value="25">25</option>
-                <option value="50">50</option>
-                <option value="100">100</option>
-              </select></>
-            ) : (<><span class="btn btn-sm shadow_btn">Rows per page:</span>
-              <select
-                className="btn btn-sm shadow_btn  "
-                value={rowsPerPage}
-                onChange={getrowperpage}
-              >
-                <option value="10">10</option>
-
-                <option value="25">25</option>
-                <option value="50">50</option>
-                <option value="100">100</option>
-              </select></>)
+          {   
+          
+            isAdmin1 ? (<> 
+            <button className="btn btn-sm shadow_btn btn-success" onClick={handleCheckAll1}>Select All</button>
+            <button className="btn btn-sm shadow_btn btn-success" onClick={handleCheckAll}>Select Per Page</button>
+            <span class="btn btn-sm shadow_btn">Rows per page:</span>
+            <select
+               className="btn btn-sm shadow_btn  "
+              value={rowsPerPage}
+              onChange={getrowperpage} 
+            >
+              <option value="10">10</option>
+            
+              <option value="25">25</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
+            </select></>
+            ) : (<> <button className="btn btn-sm shadow_btn btn-success" onClick={handleCheckAll1}>Select All</button>
+            <button className="btn btn-sm shadow_btn btn-success" onClick={handleCheckAll}>Select Per Page</button><span class="btn btn-sm shadow_btn">Rows per page:</span>
+            <select
+               className="btn btn-sm shadow_btn  "
+              value={rowsPerPage}
+              onChange={getrowperpage} 
+            >
+              <option value="10">10</option>
+            
+              <option value="25">25</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
+            </select></>)
           }
-         
+          <div> 
           <DataTable
-            key={rowsPerPage} // Add key prop to force re-render when rowsPerPage changes
-            responsive
-            id="table-to-export"
-            columns={columns}
-            data={filterleads}
-            pagination
-            paginationPerPage={rowsPerPage}
-            fixedHeader
-            fixedHeaderScrollHeight="550px"
-            // selectableRows="single"
-            highlightOnHover
-            subHeader
-            subHeaderComponent={
-              <input
-                type="text"
-                placeholder="Search here"
-                value={search}
-                onChange={(e) => setsearch(e.target.value)}
-                className="form-control w-25"
-              />
-            }
-            onSelectedRowsChange={handleSelectedRowsChange}
-            customStyles={customStyles}
-            selectedRows={selectedRowIds}
-            onChangePage={handlePageChange}
-            striped
-          />
-        </>
+  key={rowsPerPage} // Add key prop to force re-render when rowsPerPage changes
+  responsive
+  id="table-to-export"
+  columns={columns}
+  data={filterleads}
+  pagination
+  paginationPerPage={rowsPerPage}
+  fixedHeader
+  fixedHeaderScrollHeight="550px"
+  // selectableRows="single"
+  highlightOnHover
+  subHeader
+  subHeaderComponent={
+    <input
+      type="text"
+      placeholder="Search here"
+      value={search}
+      onChange={(e) => setsearch(e.target.value)}
+      className="form-control w-25"
+    />
+  }
+  onSelectedRowsChange={handleSelectedRowsChange}
+  customStyles={customStyles}
+  selectedRows={selectedRowIds}
+  onChangePage={handlePageChange}
+  striped
+/>
 
+
+          </div>
+
+
+        </>
       )}
     </div>
   );
