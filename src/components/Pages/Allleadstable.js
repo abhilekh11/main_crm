@@ -15,7 +15,7 @@ export const Allleadstable = ({ sendDataToParent, dataFromParent }) => {
   const [leads, setleads] = useState([]);
   const [status, setstatus] = useState('true');
   const [search, setsearch] = useState("");
-  const [filterleads, setfilterleads] = useState([]); 
+  const [filterleads, setfilterleads] = useState([]);
   const [selectedRowIds, setSelectedRowIds] = useState([]);
   const [selectedRowIds1, setSelectedRowIds1] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -24,7 +24,7 @@ export const Allleadstable = ({ sendDataToParent, dataFromParent }) => {
   const { Statusdata } = useSelector((state) => state.StatusData);
   const apiUrl = process.env.REACT_APP_API_URL;
   const DBuUrl = process.env.REACT_APP_DB_URL;
-  
+
   const handlePageChange = page => {
     setCurrentPage(page); // Update current page state when page changes
   };
@@ -131,26 +131,7 @@ export const Allleadstable = ({ sendDataToParent, dataFromParent }) => {
     }
   }, [localStorage.getItem("user_id"), apiUrl, DBuUrl, localStorage.getItem("role")]);
 
-  // useEffect(() => {
-  //   const result = leads.filter((lead) => {
-  //     return (
-  //       lead.full_name.toLowerCase().match(search.toLowerCase()) ||
-  //       lead?.agent_details[0]?.agent_name
-  //         .toLowerCase()
-  //         .match(search.toLowerCase()) ||
-  //       lead?.service_details[0]?.product_service_name
-  //         .toLowerCase()
-  //         .match(search.toLowerCase()) ||
-  //       lead?.lead_source_details[0]?.lead_source_name
-  //         .toLowerCase()
-  //         .match(search.toLowerCase()) ||
-  //       lead?.status_details[0]?.status_name
-  //         .toLowerCase()
-  //         .match(search.toLowerCase())
-  //     );
-  //   });
-  //   setfilterleads(result);
-  // }, [search]);
+
 
   useEffect(() => {
     const result = leads.filter((lead) => {
@@ -169,24 +150,24 @@ export const Allleadstable = ({ sendDataToParent, dataFromParent }) => {
   const isAdmin = localStorage.getItem("role") === "admin" || localStorage.getItem("role") === "TeamLeader";
   const isAdmin1 = localStorage.getItem("role") === "admin";
 
-////// cleck per page
+  ////// cleck per page
   const handleCheckAll = (e) => {
     e.preventDefault();
-     const startIndex = (currentPage - 1) * rowsPerPage;
+    const startIndex = (currentPage - 1) * rowsPerPage;
     const endIndex = Math.min(startIndex + rowsPerPage, filterleads.length);
-   const currentPageIds = filterleads.slice(startIndex, endIndex).map(row => row._id);
-   const allSelectedOnPage = currentPageIds.every(id => selectedRowIds1.includes(id));
-  
+    const currentPageIds = filterleads.slice(startIndex, endIndex).map(row => row._id);
+    const allSelectedOnPage = currentPageIds.every(id => selectedRowIds1.includes(id));
+
     if (allSelectedOnPage) {
       setSelectedRowIds1(prevIds => prevIds.filter(id => !currentPageIds.includes(id)));
     } else {
       setSelectedRowIds1(prevIds => [...new Set([...prevIds, ...currentPageIds])]);
     }
     sendDataToParent(selectedRowIds1);
-   // console.log('cleck per page select',selectedRowIds1)
+    // console.log('cleck per page select',selectedRowIds1)
   };
-  
-////// cleck All page
+
+  ////// cleck All page
   const handleCheckAll1 = (e) => {
     e.preventDefault();
     const currentPageIds = filterleads.map(row => row._id);
@@ -198,39 +179,38 @@ export const Allleadstable = ({ sendDataToParent, dataFromParent }) => {
       setSelectedRowIds1(prevIds => [...prevIds, ...currentPageIds.filter(id => !prevIds.includes(id))]);
     }
     sendDataToParent(selectedRowIds1);
-   // console.log('cleck All page select',selectedRowIds1)
+    // console.log('cleck All page select',selectedRowIds1)
   };
 
 
 
-  const handleSingleCheck = async(e, row) => {
+  const handleSingleCheck = async (e, row) => {
     const selectedId = e.target.value;
     const isChecked = e.target.checked;
     if (isChecked) {
-     await setSelectedRowIds1(prevIds => [...prevIds, selectedId]);
-     
+      await setSelectedRowIds1(prevIds => [...prevIds, selectedId]);
+
     } else {
-     await setSelectedRowIds1(prevIds => prevIds.filter(id => id !== selectedId));
+      await setSelectedRowIds1(prevIds => prevIds.filter(id => id !== selectedId));
     }
   };
- 
+
   useEffect(() => {
-    console.log('Single page select', selectedRowIds1);
     sendDataToParent(selectedRowIds1);
   }, [selectedRowIds1]);
-  
+
 
 
   const commonColumns = [
     {
       name: 'Checkbox',
-      cell: (row,index) => (<>  <input
+      cell: (row, index) => (<>  <input
         type="checkbox"
         defaultValue={row._id}
         checked={selectedRowIds1.includes(row._id)} // ensure checkboxes reflect selection state
         onChange={(e) => handleSingleCheck(e, row)}
       /></>
-       ),
+      ),
     },
 
     {
@@ -544,11 +524,11 @@ export const Allleadstable = ({ sendDataToParent, dataFromParent }) => {
       window.location.reload(false);
     }, 500);
   };
-  const getrowperpage=async(e) =>{
+  const getrowperpage = async (e) => {
     const newValue = e.target.value;
     setRowsPerPage(newValue)
   }
-  
+
   return (
     <div>
       <div className="row " style={{ display: dataFromParent }}>
@@ -644,20 +624,20 @@ export const Allleadstable = ({ sendDataToParent, dataFromParent }) => {
         </div>
       </div>
       <div className="row" style={{ paddingBottom: '23px' }}>
-      <div className="col-md-12 advS">
-      {   
-          
-          isAdmin1 ? (<>
-          <button className="btn btn-sm shadow_btn btn-success" onClick={exportToPDF}>Export PDF</button>
-            <button className="btn btn-sm shadow_btn btn-success" onClick={exportToExcel}>
-              Export Excel
-            </button>
-            <button className="btn shadow_btn btn-sm btn-danger" onClick={DeleteSelected}>
-              Delete
-            </button> </>
-          ) : (<></>)
-        }
-      </div>
+        <div className="col-md-12 advS">
+          {
+
+            isAdmin1 ? (<>
+              <button className="btn btn-sm shadow_btn btn-success" onClick={exportToPDF}>Export PDF</button>
+              <button className="btn btn-sm shadow_btn btn-success" onClick={exportToExcel}>
+                Export Excel
+              </button>
+              <button className="btn shadow_btn btn-sm btn-danger" onClick={DeleteSelected}>
+                Delete
+              </button> </>
+            ) : (<></>)
+          }
+        </div>
       </div>
       {status === false ? (
         <table
@@ -685,65 +665,65 @@ export const Allleadstable = ({ sendDataToParent, dataFromParent }) => {
         <>
 
 
-          {   
-          
-            isAdmin1 ? (<> 
-            <button className="btn btn-sm shadow_btn btn-success" onClick={handleCheckAll1}>Select All</button>
-            <button className="btn btn-sm shadow_btn btn-success" onClick={handleCheckAll}>Select Per Page</button>
-            <span class="btn btn-sm shadow_btn">Rows per page:</span>
-            <select
-               className="btn btn-sm shadow_btn  "
-              value={rowsPerPage}
-              onChange={getrowperpage} 
-            >
-              <option value="10">10</option>
-            
-              <option value="25">25</option>
-              <option value="50">50</option>
-              <option value="100">100</option>
-            </select></>
+          {
+
+            isAdmin1 ? (<>
+              <button className="btn btn-sm shadow_btn btn-success" onClick={handleCheckAll1}>Select All</button>
+              <button className="btn btn-sm shadow_btn btn-success" onClick={handleCheckAll}>Select Per Page</button>
+              <span class="btn btn-sm shadow_btn">Rows per page:</span>
+              <select
+                className="btn btn-sm shadow_btn  "
+                value={rowsPerPage}
+                onChange={getrowperpage}
+              >
+                <option value="10">10</option>
+
+                <option value="25">25</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+              </select></>
             ) : (<><span class="btn btn-sm shadow_btn">Rows per page:</span>
-            <select
-               className="btn btn-sm shadow_btn  "
-              value={rowsPerPage}
-              onChange={getrowperpage} 
-            >
-              <option value="10">10</option>
-            
-              <option value="25">25</option>
-              <option value="50">50</option>
-              <option value="100">100</option>
-            </select></>)
+              <select
+                className="btn btn-sm shadow_btn  "
+                value={rowsPerPage}
+                onChange={getrowperpage}
+              >
+                <option value="10">10</option>
+
+                <option value="25">25</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+              </select></>)
           }
-          <div> 
-          <DataTable
-  key={rowsPerPage} // Add key prop to force re-render when rowsPerPage changes
-  responsive
-  id="table-to-export"
-  columns={columns}
-  data={filterleads}
-  pagination
-  paginationPerPage={rowsPerPage}
-  fixedHeader
-  fixedHeaderScrollHeight="550px"
-  // selectableRows="single"
-  highlightOnHover
-  subHeader
-  subHeaderComponent={
-    <input
-      type="text"
-      placeholder="Search here"
-      value={search}
-      onChange={(e) => setsearch(e.target.value)}
-      className="form-control w-25"
-    />
-  }
-  onSelectedRowsChange={handleSelectedRowsChange}
-  customStyles={customStyles}
-  selectedRows={selectedRowIds}
-  onChangePage={handlePageChange}
-  striped
-/>
+          <div>
+            <DataTable
+              key={rowsPerPage} // Add key prop to force re-render when rowsPerPage changes
+              responsive
+              id="table-to-export"
+              columns={columns}
+              data={filterleads}
+              pagination
+              paginationPerPage={rowsPerPage}
+              fixedHeader
+              fixedHeaderScrollHeight="550px"
+              // selectableRows="single"
+              highlightOnHover
+              subHeader
+              subHeaderComponent={
+                <input
+                  type="text"
+                  placeholder="Search here"
+                  value={search}
+                  onChange={(e) => setsearch(e.target.value)}
+                  className="form-control w-25"
+                />
+              }
+              onSelectedRowsChange={handleSelectedRowsChange}
+              customStyles={customStyles}
+              selectedRows={selectedRowIds}
+              onChangePage={handlePageChange}
+              striped
+            />
 
 
           </div>
