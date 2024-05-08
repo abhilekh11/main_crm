@@ -4,9 +4,11 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import Breadcrumb from "./Pages/Breadcrumb";
 import axios from "axios";
-
-
+import { getAllAgent } from "../features/agentSlice";
+import { useDispatch, useSelector } from "react-redux";
 function Header() {
+  const dispatch = useDispatch();
+  const { agent } = useSelector((state) => state.agent);
   const apiUrl = process.env.REACT_APP_API_URL;
   const DBuUrl = process.env.REACT_APP_DB_URL;
   const navigate = useNavigate();
@@ -23,6 +25,13 @@ function Header() {
       window.location.reload(false);
     }, 500);
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+         dispatch(getAllAgent());
+     }
+    fetchData();
+}, []);
   const [leadcountdata, setleadcountdata] = useState({});
   const getLeadCountData = async () => {
     try {
@@ -36,18 +45,16 @@ function Header() {
       );
       setleadcountdata(responce?.data?.Count);
     } catch (error) {
-      const message = await error?.response?.data?.message;
-
-      if (message == 'Client must be connected before running operations' || message == 'Internal Server Error') {
-        getLeadCountData();
-      }
       console.log(error);
     }
   }
-  console.log(leadcountdata);
   useEffect(() => {
     getLeadCountData();
   }, []);
+
+  const url = window.location.href;
+const baseUrl = new URL(url).origin;
+  
 
   return (
     <div>
@@ -113,17 +120,12 @@ function Header() {
                   )
                 ))
               }
-              {/* Calculate and render the total */}
-              {/* <div className="dropdown-divider" />
-  <div className="dropdown-item">
-    Total: {leadcountdata.reduce((total, item) => item.name !== 'Total Lead' && item.name !== 'Total Agent' ? total + item.Value : total, 0)}
-  </div> */}
+            
 
             </div>
 
           </li>
 
-          {/* Messages Dropdown Menu */}
           <li className="nav-item dropdown">
             <Link className="nav-link" data-toggle="dropdown" href="#">
               <img
@@ -136,18 +138,29 @@ function Header() {
             </Link>
             <div className="dropdown-menu dropdown-menu-lg dropdown-menu-right">
               <Link to="/Setting" className="dropdown-item">
-                {/* Message Start */}
-                <i className="nav-icon far fa fa-cog" /> Settings
-                {/* Message End */}
+               <i className="nav-icon far fa fa-cog" /> Settings
               </Link>
               <div className="dropdown-divider" />
               <Link to="/login" className="dropdown-item" onClick={Logout}>
-                {/* Message Start */}
                 <i className="nav-icon far fa fa-cog" /> logout user
-                {/* Message End */}
-              </Link>
-            </div>
-          </li>
+               </Link>
+               {localStorage.getItem("role") === 'admin' && (
+    <>
+        {agent.agent?.map((agents, key) => (
+            agents.role !== 'admin' && (
+                <>
+                    <div className="dropdown-divider" />
+                    <a href={`${baseUrl}/newloginpage?useremail=${agents?.agent_email}`} target="_blank" rel="noopener noreferrer" className="dropdown-item" key={key}>
+                        <i className="nav-icon far fa fa-cog" /> {agents?.agent_name}
+                    </a>
+                </>
+            )
+        ))}
+    </>
+)}
+
+
+           </div> </li>
           <li className="nav-item">
             <Link
               className="nav-link"
@@ -159,19 +172,10 @@ function Header() {
             </Link>
           </li>
           <li className="nav-item">
-            {/* <Link
-              className="nav-link"
-              data-widget="control-sidebar"
-              data-controlsidebar-slide="true"
-              to="#"
-              role="button"
-            >
-              <i className="fas fa-th-large" />
-            </Link> */}
+           
           </li>
         </ul>
       </nav>
-      {/* /.navbar */}
     </div>
   );
 

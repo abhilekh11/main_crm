@@ -140,7 +140,8 @@ export const Allleadstable = ({ sendDataToParent, dataFromParent }) => {
         (lead.agent_details && lead.agent_details[0]?.agent_name && lead.agent_details[0].agent_name.toLowerCase().includes(search.toLowerCase())) ||
         (lead.service_details && lead.service_details[0]?.product_service_name && lead.service_details[0].product_service_name.toLowerCase().includes(search.toLowerCase())) ||
         (lead.lead_source_details && lead.lead_source_details[0]?.lead_source_name && lead.lead_source_details[0].lead_source_name.toLowerCase().includes(search.toLowerCase())) ||
-        (lead.status_details && lead.status_details[0]?.status_name && lead.status_details[0].status_name.toLowerCase().includes(search.toLowerCase()))
+        (lead.status_details && lead.status_details[0]?.status_name && lead.status_details[0].status_name.toLowerCase().includes(search.toLowerCase()))||
+        (lead.contact_no && lead.contact_no.toLowerCase().includes(search.toLowerCase()))
       );
     });
     setfilterleads(result);
