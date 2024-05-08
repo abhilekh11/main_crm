@@ -18,7 +18,7 @@ export const AllNewLead = ({ sendDataToParent, dataFromParent }) => {
   const [search, setsearch] = useState("");
   const [filterleads, setfilterleads] = useState([]);
   const [selectedRowIds, setSelectedRowIds] = useState([]);
- const [selectedRowIds1, setSelectedRowIds1] = useState([]);
+  const [selectedRowIds1, setSelectedRowIds1] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
@@ -26,31 +26,31 @@ export const AllNewLead = ({ sendDataToParent, dataFromParent }) => {
   const { agent } = useSelector((state) => state.agent);
   const { Statusdata } = useSelector((state) => state.StatusData);
   const apiUrl = process.env.REACT_APP_API_URL;
-  const DBuUrl = process.env.REACT_APP_DB_URL;    
-   useEffect(() => {
+  const DBuUrl = process.env.REACT_APP_DB_URL;
+  useEffect(() => {
     const fetchData = async () => {
-         dispatch(getAllAgent());
-          dispatch(getAllStatus());
+      dispatch(getAllAgent());
+      dispatch(getAllStatus());
     }
     fetchData();
-}, []);
+  }, []);
   const getAllLead1 = async () => {
     try {
       const responce = await axios.get(
-        `${apiUrl}/getAllNewLead`,{
-          headers: {
-            "Content-Type": "application/json",
-            "mongodb-url":DBuUrl,
-          },
-        }
+        `${apiUrl}/getAllNewLead`, {
+        headers: {
+          "Content-Type": "application/json",
+          "mongodb-url": DBuUrl,
+        },
+      }
       );
 
       setleads(responce?.data?.lead);
       setfilterleads(responce?.data?.lead);
       return (responce?.data?.message);
     } catch (error) {
-      const message=await error?.response?.data?.message;
-      if(message=='Client must be connected before running operations'){
+      const message = await error?.response?.data?.message;
+      if (message == 'Client must be connected before running operations') {
         getAllLead1();
       }
       console.log(error);
@@ -65,7 +65,7 @@ export const AllNewLead = ({ sendDataToParent, dataFromParent }) => {
         {
           assign_to_agent,
         },
-      ); 
+      );
       if (responce?.data?.success === true) {
         setstatus(responce?.data?.success);
         setleads(responce?.data?.lead);
@@ -77,8 +77,8 @@ export const AllNewLead = ({ sendDataToParent, dataFromParent }) => {
         setfilterleads(responce?.data?.lead);
       }
     } catch (error) {
-      const message=await error?.response?.data?.message;
-      if(message=='Client must be connected before running operations'){
+      const message = await error?.response?.data?.message;
+      if (message == 'Client must be connected before running operations') {
         getAllLead2();
       }
       console.log(error);
@@ -88,26 +88,27 @@ export const AllNewLead = ({ sendDataToParent, dataFromParent }) => {
 
   useEffect(() => {
     if (localStorage.getItem("role") === "admin") {
-    getAllLead1();
-      } else {
+      getAllLead1();
+    } else {
       getAllLead2(localStorage.getItem("user_id"));
     }
-  }, [localStorage.getItem("user_id"),apiUrl,DBuUrl]);
-  
-  
+  }, [localStorage.getItem("user_id"), apiUrl, DBuUrl]);
 
+ 
   useEffect(() => {
     const result = leads.filter((lead) => {
-      return (  
+      return (
         (lead.full_name && lead.full_name.toLowerCase().includes(search.toLowerCase())) ||
         (lead.agent_details && lead.agent_details[0]?.agent_name && lead.agent_details[0].agent_name.toLowerCase().includes(search.toLowerCase())) ||
         (lead.service_details && lead.service_details[0]?.product_service_name && lead.service_details[0].product_service_name.toLowerCase().includes(search.toLowerCase())) ||
         (lead.lead_source_details && lead.lead_source_details[0]?.lead_source_name && lead.lead_source_details[0].lead_source_name.toLowerCase().includes(search.toLowerCase())) ||
-        (lead.status_details && lead.status_details[0]?.status_name && lead.status_details[0].status_name.toLowerCase().includes(search.toLowerCase()))
+        (lead.status_details && lead.status_details[0]?.status_name && lead.status_details[0].status_name.toLowerCase().includes(search.toLowerCase())) ||
+        (lead.contact_no && lead.contact_no.toLowerCase().includes(search.toLowerCase())) // Added condition for searching by phone number
       );
     });
     setfilterleads(result);
-  }, [search]);
+}, [search]);
+
 
 
 
@@ -177,7 +178,7 @@ export const AllNewLead = ({ sendDataToParent, dataFromParent }) => {
     {
       name: "Name",
       cell: (row) => (
-        <a href={`/followupleads/${row?._id}`}>{row?.full_name}</a>  
+        <a href={`/followupleads/${row?._id}`}>{row?.full_name}</a>
       ),
       selector: (row) => row?.full_name,
       sortable: true,
@@ -187,7 +188,7 @@ export const AllNewLead = ({ sendDataToParent, dataFromParent }) => {
       selector: (row) => row?.contact_no,
       sortable: true,
     },
-   
+
   ];
 
   const getStatusBadgeClass = (statusName) => {
@@ -226,8 +227,8 @@ export const AllNewLead = ({ sendDataToParent, dataFromParent }) => {
     },
     {
       name: <div style={{ display: 'none' }}>
-      Last Comment
-    </div>,
+        Last Comment
+      </div>,
       selector: (row) => row?.description,
       sortable: true,
       cell: (row) => (
@@ -250,10 +251,10 @@ export const AllNewLead = ({ sendDataToParent, dataFromParent }) => {
             {row?.status_details[0]?.status_name == "Call Back & Hot Lead"
               ? "Hot"
               : row?.status_details[0]?.status_name == "Call Back"
-              ? "C"
-              : row?.status_details[0]?.status_name == "Meeting"
-              ? "M"
-              : ""}
+                ? "C"
+                : row?.status_details[0]?.status_name == "Meeting"
+                  ? "M"
+                  : ""}
           </span>
         </a>
       ),
@@ -275,8 +276,8 @@ export const AllNewLead = ({ sendDataToParent, dataFromParent }) => {
     },
     {
       name: <div style={{ display: 'none' }}>
-      Last Comment
-    </div>,
+        Last Comment
+      </div>,
       selector: (row) => row?.description,
       sortable: true,
       cell: (row) => (
@@ -299,10 +300,10 @@ export const AllNewLead = ({ sendDataToParent, dataFromParent }) => {
             {row?.status_details[0]?.status_name == "Call Back & Hot Lead"
               ? "Hot"
               : row?.status_details[0]?.status_name == "Call Back"
-              ? "C"
-              : row?.status_details[0]?.status_name == "Meeting"
-              ? "M"
-              : ""}
+                ? "C"
+                : row?.status_details[0]?.status_name == "Meeting"
+                  ? "M"
+                  : ""}
           </span>
         </a>
       ),
@@ -361,12 +362,12 @@ export const AllNewLead = ({ sendDataToParent, dataFromParent }) => {
         background: "#f8f9fa", // Set the background color for striped rows
       },
     },
-     // Hide the Last Comment column
-  // rows: {
-  //   style: {
-  //     display: "none",
-  //   },
-  // },
+    // Hide the Last Comment column
+    // rows: {
+    //   style: {
+    //     display: "none",
+    //   },
+    // },
   };
 
 
@@ -376,7 +377,7 @@ export const AllNewLead = ({ sendDataToParent, dataFromParent }) => {
     sendDataToParent(selectedIds);
   };
 
-  
+
   const [adSerch, setAdvanceSerch] = useState([]);
 
   const DeleteSelected = async () => {
@@ -389,7 +390,7 @@ export const AllNewLead = ({ sendDataToParent, dataFromParent }) => {
         method: "delete",
         headers: {
           "Content-Type": "application/json",
-          "mongodb-url":DBuUrl,
+          "mongodb-url": DBuUrl,
         },
         body: JSON.stringify(aaaaa),
       })
@@ -400,7 +401,7 @@ export const AllNewLead = ({ sendDataToParent, dataFromParent }) => {
           return response.json();
         })
         .then((data) => {
-           if (data?.success == true) {
+          if (data?.success == true) {
             toast.success(data?.message);
             setTimeout(() => {
               window.location.reload(false);
@@ -421,13 +422,13 @@ export const AllNewLead = ({ sendDataToParent, dataFromParent }) => {
 
   const AdvanceSerch = async (e) => {
     e.preventDefault();
-    const updatedata={...adSerch,user_id:localStorage.getItem("user_id"),role:localStorage.getItem("role")}
-   
+    const updatedata = { ...adSerch, user_id: localStorage.getItem("user_id"), role: localStorage.getItem("role") }
+
     fetch(`${apiUrl}/getAdvanceFillter`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "mongodb-url":DBuUrl,
+        "mongodb-url": DBuUrl,
       },
       body: JSON.stringify(updatedata),
     })
@@ -632,66 +633,66 @@ export const AllNewLead = ({ sendDataToParent, dataFromParent }) => {
         <>
 
 
-          {   
-          
-            isAdmin1 ? (<> 
-            <button className="btn btn-sm shadow_btn btn-success" onClick={handleCheckAll1}>Select All</button>
-            <button className="btn btn-sm shadow_btn btn-success" onClick={handleCheckAll}>Select Per Page</button>
-            <span class="btn btn-sm shadow_btn">Rows per page:</span>
-            <select
-               className="btn btn-sm shadow_btn  "
-              value={rowsPerPage}
-              onChange={getrowperpage} 
-            >
-              <option value="10">10</option>
-            
-              <option value="25">25</option>
-              <option value="50">50</option>
-              <option value="100">100</option>
-            </select></>
+          {
+
+            isAdmin1 ? (<>
+              <button className="btn btn-sm shadow_btn btn-success" onClick={handleCheckAll1}>Select All</button>
+              <button className="btn btn-sm shadow_btn btn-success" onClick={handleCheckAll}>Select Per Page</button>
+              <span class="btn btn-sm shadow_btn">Rows per page:</span>
+              <select
+                className="btn btn-sm shadow_btn  "
+                value={rowsPerPage}
+                onChange={getrowperpage}
+              >
+                <option value="10">10</option>
+
+                <option value="25">25</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+              </select></>
             ) : (<> <button className="btn btn-sm shadow_btn btn-success" onClick={handleCheckAll1}>Select All</button>
-            <button className="btn btn-sm shadow_btn btn-success" onClick={handleCheckAll}>Select Per Page</button><span class="btn btn-sm shadow_btn">Rows per page:</span>
-            <select
-               className="btn btn-sm shadow_btn"
-              value={rowsPerPage}
-              onChange={getrowperpage} 
-            >
-              <option value="10">10</option>
-            
-              <option value="25">25</option>
-              <option value="50">50</option>
-              <option value="100">100</option>
-            </select></>)
+              <button className="btn btn-sm shadow_btn btn-success" onClick={handleCheckAll}>Select Per Page</button><span class="btn btn-sm shadow_btn">Rows per page:</span>
+              <select
+                className="btn btn-sm shadow_btn"
+                value={rowsPerPage}
+                onChange={getrowperpage}
+              >
+                <option value="10">10</option>
+
+                <option value="25">25</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+              </select></>)
           }
-          <div> 
-          <DataTable
-  key={rowsPerPage} // Add key prop to force re-render when rowsPerPage changes
-  responsive
-  id="table-to-export"
-  columns={columns}
-  data={filterleads}
-  pagination
-  paginationPerPage={rowsPerPage}
-  fixedHeader
-  fixedHeaderScrollHeight="550px"
-  // selectableRows="single"
-  highlightOnHover
-  subHeader
-  subHeaderComponent={
-    <input
-      type="text"
-      placeholder="Search here"
-      value={search}
-      onChange={(e) => setsearch(e.target.value)}
-      className="form-control w-25"
-    />
-  }
-  onSelectedRowsChange={handleSelectedRowsChange}
-  customStyles={customStyles}
-  selectedRows={selectedRowIds}
-  onChangePage={handlePageChange}
-  striped
-/>
+          <div>
+            <DataTable
+              key={rowsPerPage} // Add key prop to force re-render when rowsPerPage changes
+              responsive
+              id="table-to-export"
+              columns={columns}
+              data={filterleads}
+              pagination
+              paginationPerPage={rowsPerPage}
+              fixedHeader
+              fixedHeaderScrollHeight="550px"
+              // selectableRows="single"
+              highlightOnHover
+              subHeader
+              subHeaderComponent={
+                <input
+                  type="text"
+                  placeholder="Search here"
+                  value={search}
+                  onChange={(e) => setsearch(e.target.value)}
+                  className="form-control w-25"
+                />
+              }
+              onSelectedRowsChange={handleSelectedRowsChange}
+              customStyles={customStyles}
+              selectedRows={selectedRowIds}
+              onChangePage={handlePageChange}
+              striped
+            />
 
 
           </div>
