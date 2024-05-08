@@ -29,16 +29,9 @@ export const AllNewLead = ({ sendDataToParent, dataFromParent }) => {
   const DBuUrl = process.env.REACT_APP_DB_URL;    
    useEffect(() => {
     const fetchData = async () => {
-        try {
-          await new Promise(resolve => setTimeout(resolve, 1000));
-          dispatch(getAllAgent());
+         dispatch(getAllAgent());
           dispatch(getAllStatus());
-       
-      } catch (error) {
-          console.error('Error fetching data:', error);
-      }
-      };
-
+    }
     fetchData();
 }, []);
   const getAllLead1 = async () => {
@@ -659,7 +652,7 @@ export const AllNewLead = ({ sendDataToParent, dataFromParent }) => {
             ) : (<> <button className="btn btn-sm shadow_btn btn-success" onClick={handleCheckAll1}>Select All</button>
             <button className="btn btn-sm shadow_btn btn-success" onClick={handleCheckAll}>Select Per Page</button><span class="btn btn-sm shadow_btn">Rows per page:</span>
             <select
-               className="btn btn-sm shadow_btn  "
+               className="btn btn-sm shadow_btn"
               value={rowsPerPage}
               onChange={getrowperpage} 
             >
