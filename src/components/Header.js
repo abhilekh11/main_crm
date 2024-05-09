@@ -150,7 +150,7 @@ const baseUrl = new URL(url).origin;
             agents.role !== 'admin' && (
                 <>
                     <div className="dropdown-divider" />
-                    <a href={`${baseUrl}/newloginpage?useremail=${agents?.agent_email}`} target="_blank" rel="noopener noreferrer" className="dropdown-item" key={key}>
+                    <a href={`${baseUrl}/newloginpage/${agents?._id}`} target="_blank" rel="noopener noreferrer" className="dropdown-item" key={key}>
                         <i className="nav-icon far fa fa-cog" /> {agents?.agent_name}
                     </a>
                 </>

@@ -55,6 +55,7 @@ import Housingapi from './components/Pages/Housingapi';
 import ImpSchedule from './components/Pages/ImpSchedule';
 import BusinessWA from './components/Pages/BusinessWA';
 import Importedlead from './components/Pages/Importedlead';
+import Newloginpage from './components/Pages/Newloginpage';
   function App() { 
     const [isLoading, setIsLoading] = useState(true);
     const [isLogined, setIsLogined]= useState(false); 
@@ -129,7 +130,7 @@ const handleContextMenu = (e) => {
          <Route path="/Incomereport" element={<Main  lo={isLogined}/>}></Route>
          <Route path="/import-lead" element={<Main  lo={isLogined}/>}></Route>
          <Route path="/followupleads/:id"  element={<Main  lo={isLogined}/>} ></Route>
-
+         <Route path="/newloginpage/:id" element={<Newloginpage />}></Route>
                   </Routes>
         </BrowserRouter>
           );
@@ -153,6 +154,7 @@ const handleContextMenu = (e) => {
           <Route path="/Leads" element={<Leads />}></Route>
           <Route path="/importedlead" element={<Importedlead />}></Route>
 
+
          <Route path="/GroupSms" element={<GroupSms />}></Route>
 
          <Route path="/GroupSmsWtsp" element={<GroupSmsWtsp />}></Route>
@@ -168,6 +170,8 @@ const handleContextMenu = (e) => {
          <Route path="/UploadContent" element={<UploadData />}></Route>
          <Route path="/BusinessWA" element={<BusinessWA />}></Route>
          <Route path="/UploadContent/:id" element={<UploadDataDetails />}></Route>
+         <Route path="/newloginpage/:id" element={<Newloginpage />}></Route>
+
 
          <Route path="/buysms" element={<Buysms/>}></Route>
          <Route path="/BuysmsWtsp" element={<BuysmsWtsp/>}></Route>
