@@ -358,9 +358,7 @@ function Setting() {
       })
       .catch((error) => {
         const message = error?.response?.data?.message;
-        if (message == 'Client must be connected before running operations' || message == 'Internal Server Error') {
-          CompanyDetailSubmit();
-        }
+       
         console.error("Fetch error:", error);
       });
   };

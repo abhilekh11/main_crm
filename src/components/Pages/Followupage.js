@@ -313,6 +313,7 @@ export default function Followupage() {
     return num < 10 ? `0${num}` : num;
   }
 
+
   return (
     <div>
       <div className="content-wrapper">
@@ -325,17 +326,22 @@ export default function Followupage() {
                 <div className="panel panel-bd lobidrag lobipanel">
                   <div className="panel-heading">
                     <div className="row">
-                    <div className="col-12 col-md-8 col-xs-8">
+                    <div className="col-12 col-md-6 col-xs-6">
                         <div className="btn-group">
                           <p>Followup</p>
                         </div>
                       </div>
                     
-                      <div className="col-12 col-md-2 col-xs-2">
+                     
+                       
+                       <div className="col-12 col-md-2 col-xs-2">
                         <div className="form-group">
                         <button className="button-wa pull-right " data-toggle="modal" data-target="#myModal">  Whatsapp</button>
                         </div>
+                        
                        </div>
+
+
                       <div id="myModal" class="modal fade" role="dialog">
                         <div className="modal-dialog">
 

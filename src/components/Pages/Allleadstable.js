@@ -246,6 +246,48 @@ export const Allleadstable = ({ sendDataToParent, dataFromParent }) => {
         return "bg-default"; // Default class for other statuses
     }
   };
+  const [response, setResponse] = useState(null);
+  const [error, setError] = useState(null);
+  
+   const StartCall=async(mobile,coustmername,agentname,agentid)=>{
+     let agentNumber;
+
+    if (agentid === '660e41a556c9cfebc340c62a') {
+        agentNumber = '7669599769';  // Khayati
+    } else if (agentid === '660e411856c9cfebc340c5e5') {
+        agentNumber = '7669599759';  // Nabya
+    } else {
+        agentNumber = '7669599759';  // Nabya (default)
+    }
+
+    let data = JSON.stringify({
+      "secretKey": "Ha59PMqNZ2JRdChP",
+      "clientId": "Magiec_C2C",
+      "agentNumber":`${agentNumber}`,
+      "customerNumber": `${mobile}`,
+      "agentName": `${agentname}`,
+      "customerName": `${coustmername}`,
+      "calledId": "08037658901"
+    });
+
+    let config = {
+      method: 'post',
+      maxBodyLength: Infinity,
+      url: 'https://c2c.ivrobd.com/api/c2c/process',
+      headers: { 
+        'Content-Type': 'application/json'
+      },
+      data: data
+    };
+
+    axios.request(config)
+      .then((response) => {
+        setResponse(response.data);
+      })
+      .catch((error) => {
+        setError(error);
+      });
+   }
 
   const adminColumns = [
     {
@@ -278,7 +320,7 @@ export const Allleadstable = ({ sendDataToParent, dataFromParent }) => {
     },
     {
       name: "Action",
-      cell: (row) => (
+      cell: (row) => (<>
         <a href={`/followupleads/${row?._id}`}>
           <button className="btn btn-success btn-sm"><i className="fa fa-pencil-square" aria-hidden="true"></i></button>
           <span
@@ -296,6 +338,12 @@ export const Allleadstable = ({ sendDataToParent, dataFromParent }) => {
                   : ""}
           </span>
         </a>
+        <span
+      onClick={() => StartCall(row?.contact_no, row?.full_name, row?.agent_details[0]?.agent_nam,row?.agent_details[0]?._id)}
+      className="btn btn-danger btn-sm"
+    >
+      <i className="fa fa-phone"></i>
+    </span></>
       ),
 
       sortable: true,

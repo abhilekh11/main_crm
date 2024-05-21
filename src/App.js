@@ -94,7 +94,7 @@ const handleContextMenu = (e) => {
     document.removeEventListener('keydown', handleKeyDown);
     // document.removeEventListener('contextmenu', handleContextMenu);
   };
-   // for ctrl p block and also for right click
+  
 
 
     }, []);
