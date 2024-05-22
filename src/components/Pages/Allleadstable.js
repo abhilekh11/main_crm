@@ -253,13 +253,13 @@ export const Allleadstable = ({ sendDataToParent, dataFromParent }) => {
      let agentNumber;
 
     if (agentid === '660e41a556c9cfebc340c62a') {
-        agentNumber = '7669599769';  // Khayati
+        agentNumber = '9315857918';  // Khayati
     } else if (agentid === '660e411856c9cfebc340c5e5') {
         agentNumber = '7669599759';  // Nabya
     } else {
         agentNumber = '7669599759';  // Nabya (default)
     }
-
+  
     let data = JSON.stringify({
       "secretKey": "Ha59PMqNZ2JRdChP",
       "clientId": "Magiec_C2C",
@@ -339,7 +339,7 @@ export const Allleadstable = ({ sendDataToParent, dataFromParent }) => {
           </span>
         </a>
         <span
-      onClick={() => StartCall(row?.contact_no, row?.full_name, row?.agent_details[0]?.agent_nam,row?.agent_details[0]?._id)}
+      onClick={() => StartCall(row?.contact_no, row?.full_name, row?.agent_details[0]?.agent_name,row?.agent_details[0]?._id)}
       className="btn btn-danger btn-sm"
     >
       <i className="fa fa-phone"></i>
