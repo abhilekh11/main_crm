@@ -12,6 +12,7 @@ import { getAllLeadSource } from "../features/leadSource";
 import axios from "axios";
 import MyCalendar from "../components/Pages/MonthlyCalendar"
 import Notification from "./Notification";
+import CallBarchart from "./Pages/CallBarchart";
 
 function Home() {
   const apiUrl = process.env.REACT_APP_API_URL;
@@ -612,6 +613,29 @@ function Home() {
                   </div>
                   <div className="panel-bodyes personales">
                     <LineChart1 />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="row">
+              <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12 pl-0  lobipanel-parent-sortable ui-sortable"
+                data-lobipanel-child-inner-id="JboVwpEyCD"
+              >
+                <div
+                  className="panel panel-bd lobidrag bg-white lobipanel lobipanel-sortable"
+                  data-inner-id="JboVwpEyCD"
+                  data-index={0}
+                >
+                  <div className="panel-heading ui-sortable-handle">
+                    <div
+                      className="panel-title"
+                    >
+                      <h4>Calling Graph</h4>
+                    </div>
+                  </div>
+                  <div className="panel-bodyes personales">
+                    <CallBarchart />
                   </div>
                 </div>
               </div>
