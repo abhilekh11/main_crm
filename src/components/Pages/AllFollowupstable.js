@@ -212,7 +212,48 @@ export default function AllFollowupstable({ sendDataToParent, dataFromParent }) 
     sendDataToParent(selectedRowIds1);
   }, [selectedRowIds1]);
 
+  const [response, setResponse] = useState(null);
+  const [error, setError] = useState(null);
+  
+  const StartCall=async(mobile,coustmername,agentname,agentid)=>{
+    let agentNumber;
 
+   if (agentid === '660e41a556c9cfebc340c62a') {
+       agentNumber = '9315857918';  // Khayati
+   } else if (agentid === '660e411856c9cfebc340c5e5') {
+       agentNumber = '7669599759';  // Nabya
+   } else {
+       agentNumber = '7669599759';  // Nabya (default)
+   }
+ 
+   let data = JSON.stringify({
+     "secretKey": "Ha59PMqNZ2JRdChP",
+     "clientId": "Magiec_C2C",
+     "agentNumber":`${agentNumber}`,
+     "customerNumber": `${mobile}`,
+     "agentName": `${agentname}`,
+     "customerName": `${coustmername}`,
+     "calledId": "08037658901"
+   });
+
+   let config = {
+     method: 'post',
+     maxBodyLength: Infinity,
+     url: 'https://c2c.ivrobd.com/api/c2c/process',
+     headers: { 
+       'Content-Type': 'application/json'
+     },
+     data: data
+   };
+
+   axios.request(config)
+     .then((response) => {
+       setResponse(response.data);
+     })
+     .catch((error) => {
+       setError(error);
+     });
+  }
 
   const commonColumns = [
     {
@@ -305,14 +346,14 @@ export default function AllFollowupstable({ sendDataToParent, dataFromParent }) 
 
     {
       name: "Action",
-      cell: (row) => (
+      cell: (row) => (<>
         <a href={`/followupleads/${row?._id}`}><button className="btn btn-success btn-sm"><i className="fa fa-pencil-square" aria-hidden="true"></i></button>
           <span className={`badge ${getStatusBadgeClass(row?.status_details[0]?.status_name)}`} style={{ marginLeft: '10px' }} >
             {row?.status_details[0]?.status_name == 'Call Back & Hot Lead' ? 'Hot' : row?.status_details[0]?.status_name == 'Call Back' ? 'C' :
               row?.status_details[0]?.status_name == 'Meeting' ? 'M' : ''
             }
           </span>
-        </a>
+        </a></>
       ),
       sortable: true,
     },
@@ -342,7 +383,7 @@ export default function AllFollowupstable({ sendDataToParent, dataFromParent }) 
     },
     {
       name: "Action",
-      cell: (row) => (
+      cell: (row) => (<>
         <a href={`/followupleads/${row?._id}`}><button className="btn btn-success btn-sm"><i className="fa fa-pencil-square" aria-hidden="true"></i></button>
           <span className={`badge ${getStatusBadgeClass(row?.status_details[0]?.status_name)}`} style={{ marginLeft: '10px' }} >
             {row?.status_details[0]?.status_name == 'Call Back & Hot Lead' ? 'Hot' : row?.status_details[0]?.status_name == 'Call Back' ? 'C' :
@@ -350,6 +391,8 @@ export default function AllFollowupstable({ sendDataToParent, dataFromParent }) 
             }
           </span>
         </a>
+
+</>
       ),
       sortable: true,
     },

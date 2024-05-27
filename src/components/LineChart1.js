@@ -24,7 +24,7 @@ const ChartComponent = () => {
     const IncomeGraphOverviewForTeamLeader=async ()=>{
       try {
         const responce = await axios.post(
-          `http://localhost:5000/api/v1/IncomeGraphOverviewForTeamLeader`,{
+          `${apiUrl}/IncomeGraphOverviewForTeamLeader`,{
             user_id:localStorage.getItem("user_id"),
           }, {
             headers: {
@@ -42,7 +42,7 @@ const ChartComponent = () => {
     const IncomeGraphOverviewForUser=async ()=>{
       try {
         const responce = await axios.post(
-          `http://localhost:5000/api/v1/IncomeGraphOverviewForUser`,{
+          `${apiUrl}/IncomeGraphOverviewForUser`,{
             user_id:localStorage.getItem("user_id"),
           }, {
             headers: {

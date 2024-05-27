@@ -343,7 +343,8 @@ export const Allleadstable = ({ sendDataToParent, dataFromParent }) => {
       className="btn btn-danger btn-sm"
     >
       <i className="fa fa-phone"></i>
-    </span></>
+    </span>
+    </>
       ),
 
       sortable: true,
@@ -375,7 +376,7 @@ export const Allleadstable = ({ sendDataToParent, dataFromParent }) => {
     },
     {
       name: "Action",
-      cell: (row) => (
+      cell: (row) => (<>
         <a href={`/followupleads/${row?._id}`}>
           <button className="btn btn-success"><i className="fa fa-pencil-square" aria-hidden="true"></i></button>
           <span
@@ -393,6 +394,13 @@ export const Allleadstable = ({ sendDataToParent, dataFromParent }) => {
                   : ""}
           </span>
         </a>
+        <span
+        onClick={() => StartCall(row?.contact_no, row?.full_name, row?.agent_details[0]?.agent_name,row?.agent_details[0]?._id)}
+        className="btn btn-danger btn-sm"
+      >
+        <i className="fa fa-phone"></i>
+      </span>
+      </>
       ),
       sortable: true,
     },
