@@ -543,7 +543,7 @@ export const Allleadstable = ({ sendDataToParent, dataFromParent }) => {
       });
   };
 
-  const exportToExcel = () => {
+  const exportToExcel = () => {     
     const columnsForExport = columns.map((column) => ({
       title: column.name,
       dataIndex: column.selector,
